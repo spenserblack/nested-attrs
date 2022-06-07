@@ -29,6 +29,8 @@ def ngetattr(target, attrs, *default):
     obj = target
     for index, attr in enumerate(attrs):
         if not hasattr(obj, attr):
+            if default:
+                return default[0]
             attribute_names = "." + ".".join(attrs[:index]) if index > 0 else ""
             raise AttributeError(
                 "'{target}{attributes}' has no attribute '{attr}'".format(
