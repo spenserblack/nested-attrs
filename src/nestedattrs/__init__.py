@@ -25,4 +25,17 @@ def ngetattr(target, attrs, *default):
     Without a default, an exception will be raised.
     """
     _check_default("ngetattr", 3, default)
-    raise NotImplementedError()
+    attrs = attrs.split(".")
+    obj = target
+    for index, attr in enumerate(attrs):
+        if not hasattr(target, attr):
+            attribute_names = "." + ".".join(attrs[:index]) if index > 0 else ""
+            raise AttributeError(
+                "'{target}{attributes}' has no attribute '{attr}'".format(
+                    target=target.__class__.__name__,
+                    attributes=attribute_names,
+                    attr=attr,
+                )
+            )
+        obj = getattr(obj, attr)
+    return obj
