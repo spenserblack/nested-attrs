@@ -34,7 +34,7 @@ class NestedGetAttrTests(TestCase):
         It should raise an error for an attribute that does not exist.
         """
         with self.assertRaisesRegex(
-            AttributeError, r"'Anything.nested' has no attribute 'd'"
+            AttributeError, r"'Anything\.nested' has no attribute 'd'"
         ):
             ngetattr(self.mock, "nested.d")
 
