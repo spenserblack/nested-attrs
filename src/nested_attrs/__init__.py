@@ -2,7 +2,7 @@
 This package provides some helpers for accessing and manipulating nested attributes.
 """
 
-__all__ = ["nhasattr", "ngetattr", "nsetattr"]
+__all__ = ["nhasattr", "ngetattr", "nsetattr", "ndelattr"]
 
 
 def _check_default(name, nargs, default):
