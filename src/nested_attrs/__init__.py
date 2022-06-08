@@ -14,20 +14,20 @@ def _check_default(name, nargs, default):
         raise TypeError(f"{name} expects at most {nargs} arguments, got {default_len}")
 
 
-def nhasattr(target, attrs):
+def nhasattr(obj, attrs):
     """
-    Returns whether the target has an attribute with the given path.
+    Returns whether the object has an attribute with the given path.
 
-    This is done by calling ngetattr(target, name) and catching AttributeError.
+    This is done by calling ngetattr(obj, name) and catching AttributeError.
     """
     try:
-        ngetattr(target, attrs)
+        ngetattr(obj, attrs)
     except AttributeError:
         return False
     return True
 
 
-def ngetattr(target, attrs, *default):
+def ngetattr(obj, attrs, *default):
     """
     ngetattr(target, attrs[, default]) -> value
 
@@ -39,24 +39,24 @@ def ngetattr(target, attrs, *default):
     """
     _check_default("ngetattr", 3, default)
     attrs = attrs.split(".")
-    obj = target
+    target = obj
     for index, attr in enumerate(attrs):
-        if not hasattr(obj, attr):
+        if not hasattr(target, attr):
             if default:
                 return default[0]
             attribute_names = "." + ".".join(attrs[:index]) if index > 0 else ""
             raise AttributeError(
-                "'{target}{attributes}' has no attribute '{attr}'".format(
-                    target=target.__class__.__name__,
+                "'{obj}{attributes}' has no attribute '{attr}'".format(
+                    obj=obj.__class__.__name__,
                     attributes=attribute_names,
                     attr=attr,
                 )
             )
-        obj = getattr(obj, attr)
-    return obj
+        target = getattr(target, attr)
+    return target
 
 
-def nsetattr(target, attrs, value):
+def nsetattr(obj, attrs, value):
     """
     Set a nested attribute on the target object; nsetattr(x, 'y.z', None) is equivalent
     to x.y.z = None.
@@ -66,7 +66,7 @@ def nsetattr(target, attrs, value):
     attrs = attrs.rsplit(".", 1)
     if len(attrs) > 1:
         parents, child = attrs
-        obj = ngetattr(target, parents)
+        target = ngetattr(obj, parents)
     else:
-        obj, child = target, attrs[0]
-    setattr(obj, child, value)
+        target, child = obj, attrs[0]
+    setattr(target, child, value)
