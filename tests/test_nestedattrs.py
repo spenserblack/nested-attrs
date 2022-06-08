@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.nestedattrs import ngetattr
+from src.nestedattrs import ngetattr, nsetattr
 
 from .mock import Anything
 
@@ -55,3 +55,35 @@ class NestedGetAttrTests(TestCase):
         """
         with self.assertRaises(TypeError):
             ngetattr(self.mock, "a", 1, 2)
+
+
+class NestedSetAttrTests(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.mock = Anything(a=1, nested=Anything(a=2, c=3), b=2)
+
+    def test_set_top_level_attr(self):
+        """
+        It should set an attribute just like the built-in getattr.
+        """
+        nsetattr(self.mock, "a", 5)
+        self.assertEqual(self.mock.a, 5)
+        self.assertEqual(self.mock.b, 2)
+
+    def test_set_nested_attr(self):
+        nsetattr(self.mock, "nested.c", 99)
+        self.assertEqual(self.mock.nested.c, 99)
+        self.assertEqual(self.mock.nested.a, 2)
+
+    def test_no_parent_attr_raises(self):
+        """
+        It should raise an error for an attribute that does not exist.
+        """
+        with self.assertRaisesRegex(
+            AttributeError, r"'Anything' has no attribute 'notsted'"
+        ):
+            nsetattr(self.mock, "notsted.c", 4)
+        with self.assertRaisesRegex(
+            AttributeError, r"'Anything\.nested' has no attribute 'x'"
+        ):
+            nsetattr(self.mock, "nested.x.d", 4)
