@@ -69,3 +69,14 @@ def nsetattr(obj, attrs, value):
     else:
         target, child = obj, attrs[0]
     setattr(target, child, value)
+
+
+def ndelattr(obj, attrs):
+    """
+    Deletes the named attribute from the given object.
+
+    delattr(x, 'y.z') is equivalent to ``del x.y.z''
+
+    When a parent attribute does not exist, an AttributeError is raised.
+    """
+    pass
