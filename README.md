@@ -8,8 +8,8 @@ Just some small helpers for nested attributes.
 ## Example
 
 ```python
-from nestedattrs import ngetattr as getattr
-from nestedattrs import nsetattr as setattr
+from nested_attrs import ngetattr as getattr
+from nested_attrs import nsetattr as setattr
 
 setattr(x, 'y.z', 'Hello, World!')
 getattr(x, 'y.z') # 'Hello, World!

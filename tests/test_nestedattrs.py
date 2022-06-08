@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.nestedattrs import ngetattr, nsetattr
+from src.nested_attrs import ngetattr, nsetattr
 
 from .mock import Anything
 
