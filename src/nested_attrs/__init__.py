@@ -60,7 +60,7 @@ def nsetattr(obj, attrs, value):
     Set a nested attribute on the target object; nsetattr(x, 'y.z', None) is equivalent
     to x.y.z = None.
 
-    When a parent attribute does not exists, an AttributeError is raised.
+    When a parent attribute does not exist, an AttributeError is raised.
     """
     attrs = attrs.rsplit(".", 1)
     if len(attrs) > 1:

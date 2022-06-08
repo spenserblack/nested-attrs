@@ -91,7 +91,7 @@ class NestedSetAttrTests(TestCase):
 
     def test_set_top_level_attr(self):
         """
-        It should set an attribute just like the built-in getattr.
+        It should set an attribute just like the built-in setattr.
         """
         nsetattr(self.mock, "a", 5)
         self.assertEqual(self.mock.a, 5)
