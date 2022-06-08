@@ -1,8 +1,35 @@
 from unittest import TestCase
 
-from src.nested_attrs import ngetattr, nsetattr
+from src.nested_attrs import ngetattr, nhasattr, nsetattr
 
 from .mock import Anything
+
+
+class NestedHasAttrTests(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.mock = Anything(a=1, nested=Anything(a=2, c=3), b=2)
+
+    def test_has_top_level_attr(self):
+        """
+        It should return True just like the built-in hasattr.
+        """
+        self.assertTrue(nhasattr(self.mock, "a"))
+        self.assertTrue(nhasattr(self.mock, "b"))
+
+    def test_has_not_top_level_attr(self):
+        """
+        It should return False just like the built-in hasattr.
+        """
+        self.assertFalse(nhasattr(self.mock, "c"))
+
+    def test_has_nested_attr(self):
+        self.assertTrue(nhasattr(self.mock, "nested.a"))
+        self.assertTrue(nhasattr(self.mock, "nested.c"))
+
+    def test_has_not_nested_attr(self):
+        self.assertFalse(nhasattr(self.mock, "nested.b"))
 
 
 class NestedGetAttrTests(TestCase):

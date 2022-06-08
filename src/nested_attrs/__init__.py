@@ -2,7 +2,7 @@
 This package provides some helpers for accessing and manipulating nested attributes.
 """
 
-__all__ = ["ngetattr", "nsetattr"]
+__all__ = ["nhasattr", "ngetattr", "nsetattr"]
 
 
 def _check_default(name, nargs, default):
@@ -12,6 +12,19 @@ def _check_default(name, nargs, default):
     default_len = len(default)
     if default_len > 1:
         raise TypeError(f"{name} expects at most {nargs} arguments, got {default_len}")
+
+
+def nhasattr(target, attrs):
+    """
+    Returns whether the target has an attribute with the given path.
+
+    This is done by calling ngetattr(target, name) and catching AttributeError.
+    """
+    try:
+        ngetattr(target, attrs)
+    except AttributeError:
+        return False
+    return True
 
 
 def ngetattr(target, attrs, *default):
