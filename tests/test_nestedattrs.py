@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.nested_attrs import ngetattr, nhasattr, nsetattr
+from src.nested_attrs import ndelattr, ngetattr, nhasattr, nsetattr
 
 from .mock import Anything
 
@@ -114,3 +114,35 @@ class NestedSetAttrTests(TestCase):
             AttributeError, r"'Anything\.nested' has no attribute 'x'"
         ):
             nsetattr(self.mock, "nested.x.d", 4)
+
+
+class NestedDelAttrTests(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.mock = Anything(a=1, nested=Anything(a=2, c=3), b=2)
+
+    def test_del_top_level_attr(self):
+        """
+        It should delete an attribute just like the built-in delattr.
+        """
+        ndelattr(self.mock, "a")
+        self.assertFalse(hasattr(self.mock, "a"))
+        self.assertTrue(hasattr(self.mock.nested, "a"))
+
+    def test_del_nested_attr(self):
+        ndelattr(self.mock, "nested.c")
+        self.assertFalse(hasattr(self.mock.nested, "c"))
+        self.assertTrue(hasattr(self.mock.nested, "a"))
+
+    def test_no_parent_attr_raises(self):
+        """
+        It should raise an error for an attribute that does not exist.
+        """
+        with self.assertRaisesRegex(
+            AttributeError, r"'Anything' has no attribute 'notsted'"
+        ):
+            ndelattr(self.mock, "notsted.c")
+        with self.assertRaisesRegex(
+            AttributeError, r"'Anything\.nested' has no attribute 'x'"
+        ):
+            ndelattr(self.mock, "nested.x.d")

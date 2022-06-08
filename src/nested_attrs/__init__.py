@@ -2,7 +2,7 @@
 This package provides some helpers for accessing and manipulating nested attributes.
 """
 
-__all__ = ["nhasattr", "ngetattr", "nsetattr"]
+__all__ = ["nhasattr", "ngetattr", "nsetattr", "ndelattr"]
 
 
 def _check_default(name, nargs, default):
@@ -62,10 +62,32 @@ def nsetattr(obj, attrs, value):
 
     When a parent attribute does not exist, an AttributeError is raised.
     """
+    target, child = _get_last_parent(obj, attrs)
+    setattr(target, child, value)
+
+
+def ndelattr(obj, attrs):
+    """
+    Deletes the named attribute from the given object.
+
+    delattr(x, 'y.z') is equivalent to ``del x.y.z''
+
+    When a parent attribute does not exist, an AttributeError is raised.
+    """
+    target, child = _get_last_parent(obj, attrs)
+    delattr(target, child)
+
+
+def _get_last_parent(obj, attrs):
+    """
+    Gets the last child attribute that is also a parent, and the name of its child.
+
+    _get_last_parent(a, 'b.c.d') is equivalent to ``(a.b.c, 'd')''
+    """
     attrs = attrs.rsplit(".", 1)
     if len(attrs) > 1:
         parents, child = attrs
         target = ngetattr(obj, parents)
     else:
         target, child = obj, attrs[0]
-    setattr(target, child, value)
+    return target, child
