@@ -41,3 +41,15 @@ def ngetattr(target, attrs, *default):
             )
         obj = getattr(obj, attr)
     return obj
+
+
+def nsetattr(target, attrs, value):
+    """
+    Set a nested attribute on the target object; nsetattr(x, 'y.z', None) is equivalent
+    to x.y.z = None.
+
+    When a parent attribute does not exists, an AttributeError is raised.
+    """
+    parents, child = attrs.rsplit(".", 1)
+    obj = ngetattr(target, parents)
+    setattr(obj, child, value)
