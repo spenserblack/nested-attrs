@@ -62,12 +62,7 @@ def nsetattr(obj, attrs, value):
 
     When a parent attribute does not exists, an AttributeError is raised.
     """
-    attrs = attrs.rsplit(".", 1)
-    if len(attrs) > 1:
-        parents, child = attrs
-        target = ngetattr(obj, parents)
-    else:
-        target, child = obj, attrs[0]
+    target, child = _get_last_parent(obj, attrs)
     setattr(target, child, value)
 
 
@@ -79,4 +74,20 @@ def ndelattr(obj, attrs):
 
     When a parent attribute does not exist, an AttributeError is raised.
     """
-    pass
+    target, child = _get_last_parent(obj, attrs)
+    delattr(target, child)
+
+
+def _get_last_parent(obj, attrs):
+    """
+    Gets the last child attribute that is also a parent, and the name of its child.
+
+    _get_last_parent(a, 'b.c.d') is equivalent to ``(a.b.c, 'd')''
+    """
+    attrs = attrs.rsplit(".", 1)
+    if len(attrs) > 1:
+        parents, child = attrs
+        target = ngetattr(obj, parents)
+    else:
+        target, child = obj, attrs[0]
+    return target, child
