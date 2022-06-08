@@ -41,18 +41,17 @@ def ngetattr(obj, attrs, *default):
     attrs = attrs.split(".")
     target = obj
     for index, attr in enumerate(attrs):
-        if not hasattr(target, attr):
+        try:
+            target = getattr(target, attr)
+        except AttributeError as src_err:
             if default:
                 return default[0]
             attribute_names = "." + ".".join(attrs[:index]) if index > 0 else ""
             raise AttributeError(
                 "'{obj}{attributes}' has no attribute '{attr}'".format(
-                    obj=obj.__class__.__name__,
-                    attributes=attribute_names,
-                    attr=attr,
+                    obj=obj.__class__.__name__, attributes=attribute_names, attr=attr
                 )
-            )
-        target = getattr(target, attr)
+            ) from src_err
     return target
 
 
