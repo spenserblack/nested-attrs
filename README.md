@@ -1,5 +1,6 @@
 # nested-attrs
 
+[![PyPI](https://img.shields.io/pypi/v/nested-attrs)](https://pypi.org/project/nested-attrs/)
 [![CI](https://github.com/spenserblack/nested-attrs/actions/workflows/ci.yml/badge.svg)](https://github.com/spenserblack/nested-attrs/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/spenserblack/nested-attrs/branch/main/graph/badge.svg?token=XT5zP9lhqm)](https://codecov.io/gh/spenserblack/nested-attrs)
 
